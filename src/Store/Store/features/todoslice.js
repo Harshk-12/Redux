@@ -5,19 +5,34 @@ name:'todo',
 initialState:{
     inputvalue:'',
     addedvalues:[],
-    editvalue:false,
-    deletevalue:[],
+    editvalue:null,
+    deletevalue:[]
+ },
+    reducers:{
+       setinputvalue:(state,action)=>{ state.inputvalue=action.payload},
+        setaddedvalue:(state,action)=>{ 
+             (state.editvalue!==null)?  (state.addedvalues[state.editvalue]=state.inputvalue , state.editvalue=null)
+               :(state.addedvalues=[...state.addedvalues,action.payload] )},
+               // :(state.addedvalues=state.addedvalues.push(action.payload) )
+            
+     setedit:(state,action)=>{
+        state.editvalue=action.payload;
+        // state.addedvalues[action.payload]=setinputvalue(action.payload) 
 
+        state.inputvalue=state.addedvalues[action.payload]
 
     },
-    reducers:{
-    //    setinputvalue:(state,action)=>{ (state.editvalue===true)?state.addedvalues[]   state.inputvalue=action.payload},
-        setaddedvalue:(state,action)=>{state.addedvalues=[...state.addedvalues,action.payload]
-        console.log(state.addedvalues ) 
-     },
-     setedit:(state,action)=>{
-        state.editvalue=true;
-        state.addedvalues[action.payload]=state.inputvalue }
+
+    clear:(state,action)=>{ 
+        
+        let newlist=state.addedvalues.filter((item,index)=>{
+         return index!==action.payload
+             
+        })
+        console.log(newlist)
+        state.addedvalues=newlist
+    }
+
 
         // edittask(state){},
         // deletetask(state){}
@@ -29,4 +44,4 @@ initialState:{
 
 
 export default todoslice.reducer;
-export const{setaddedvalue, setinputvalue,setedit}=todoslice.actions;
+export const{setaddedvalue, setinputvalue,setedit, clear}=todoslice.actions;
